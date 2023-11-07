@@ -18,6 +18,7 @@ class BasicMessagePublisher:
         routing_key: str,
         body: any,
     ):
+        self.rabbit.check_connection()
         self.channel.basic_publish(
             exchange=exchange_name,
             routing_key=routing_key,
