@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
-    name='rabbit-wrapper',
+    name='rabbit_wrapper',
     version='0.1',
     url='https://github.com/Satellite-Operations-Services-Optimizer/rabbit-wrapper',
     package_dir={"": "app"},

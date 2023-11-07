@@ -12,7 +12,9 @@ class Consumer(BasicMessageConsumer):
         self.rabbit.declare_queue(queue_name)
     
     def get_message(self, auto_ack: bool = False):
-        super().get_message(self.queue_name, auto_ack)
+        (_, _, body) = super().get_message(self.queue_name, auto_ack)
+        body = self.decode_message(body)
+        return body
     
     def consume_messages(self, callback: Callable[[Any], Any]):
         logged_callback = self._logged_message_callback(callback)
