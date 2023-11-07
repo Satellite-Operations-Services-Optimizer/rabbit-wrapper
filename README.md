@@ -1,8 +1,8 @@
-This is just like a regular pip package. No need for you to pip install it though. I have included it in the requirements.txt file, so it will be installed along with all the other dependencies.
+This is just like a regular pip package. No need for you to pip install it though. I have included it in the requirements.txt file, so it will be installed along with all the other dependencies. All you need to do is just import it into your python file.
 
 # Defining connection
 ```python
-from rabbit_wrapper import Rabbit, Consumer
+from rabbit_wrapper import Rabbit, Publisher, Consumer
 
 # create a **blocking** connection to rabbitmq
 rabbit = Rabbit('localhost', 5672, 'guest', 'guest', '/', blocking=True)
