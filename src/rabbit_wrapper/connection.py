@@ -7,11 +7,11 @@ from abc import abstractmethod
 class Connection:
     connection = None
     def __init__(self, user: str, password: str, host: str, port: int, vhost='/', protocol="amqp"):
-        credentials = pika.PlainCredentials(user, password)
+        credentials = pika.PlainCredentials(str(user), str(password))
         self.parameters = pika.ConnectionParameters(
-            host=host,
-            port=port,
-            virtual_host=vhost,
+            host=str(host),
+            port=int(port),
+            virtual_host=str(vhost),
             credentials=credentials,
             heartbeat=36000,
             connection_attempts=5
