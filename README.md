@@ -2,7 +2,8 @@
 ```python
 from rabbit_wrapper import Rabbit, Consumer
 
-rabbit = Rabbit('localhost', 5672, 'guest', 'guest', '/', blocking=True) # note, blocking=True means this is a blocking connection
+# create a **blocking** connection to rabbitmq
+rabbit = Rabbit('localhost', 5672, 'guest', 'guest', '/', blocking=True)
 ```
 
 # Publishing messages
