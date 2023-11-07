@@ -1,3 +1,5 @@
+This is just like a regular pip package. No need for you to pip install it though. I have included it in the requirements.txt file, so it will be installed along with all the other dependencies.
+
 # Defining connection
 ```python
 from rabbit_wrapper import Rabbit, Consumer
