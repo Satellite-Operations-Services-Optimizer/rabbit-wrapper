@@ -3,7 +3,7 @@ from ..basic.publisher import BasicMessagePublisher
 class Publisher(BasicMessagePublisher):
     def __init__(self, rabbit, queue_name):
         super().__init__(rabbit)
-        self.queue_name = queue_name
+        self.queue_name = str(queue_name)
     
     def publish_message(self, body):
         self.send_message(

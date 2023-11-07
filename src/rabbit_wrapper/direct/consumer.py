@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 class Consumer(BasicMessageConsumer):
     def __init__(self, rabbit: Rabbit, queue_name: str):
         super().__init__(rabbit)
-        self.queue_name = queue_name
-        self.rabbit.declare_queue(queue_name)
+        self.queue_name = str(queue_name)
+        self.rabbit.declare_queue(self.queue_name)
     
     def get_message(self, auto_ack: bool = False):
         (_, _, body) = super().get_message(self.queue_name, auto_ack)
