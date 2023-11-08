@@ -10,5 +10,5 @@ setup(
         'pika >= 1.3.2',
         'msgpack>=1.0.7'
     ],
-    python_requires=">=3.10"
+    python_requires=">=3.8"
 )
