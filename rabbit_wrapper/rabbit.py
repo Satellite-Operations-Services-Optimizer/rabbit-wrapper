@@ -8,7 +8,7 @@ class Rabbit:
             self.connection = BlockingConnection(user, password, host, port, vhost)
         else:
             self.connection = SelectConnection(user, password, host, port, vhost)
-        self.connect()
+        self.connection.connect()
         self.channel = self.connection.channel
 
     def declare_queue(
