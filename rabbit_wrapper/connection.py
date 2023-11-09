@@ -43,7 +43,7 @@ class Connection:
                 time.sleep(1)
                 tries += 1
                 if tries == 20:
-                    logger.exception("RabbitMQ connection could not be established")
+                    logger.exception(f"RabbitMQ connection could not be established after {tries} tries.")
                     raise AMQPConnectionError(e)
         return self.connection
     
