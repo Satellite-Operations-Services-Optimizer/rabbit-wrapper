@@ -3,7 +3,9 @@ from pika.exceptions import AMQPConnectionError
 import ssl
 import time
 from abc import abstractmethod
+import logging
 
+logger = logging.getLogger(__name__)
 class Connection:
     connection = None
     def __init__(self, user: str, password: str, host: str, port: int, vhost='/', protocol="amqp"):
@@ -36,10 +38,12 @@ class Connection:
                 if self.connection.is_open:
                     break
             except (AMQPConnectionError, Exception) as e:
+                logger.warning("RabbitMQ connection failed. Retrying...")
                 print(e)
-                time.sleep(5)
+                time.sleep(1)
                 tries += 1
                 if tries == 20:
+                    logger.exception("RabbitMQ connection could not be established")
                     raise AMQPConnectionError(e)
         return self.connection
     
