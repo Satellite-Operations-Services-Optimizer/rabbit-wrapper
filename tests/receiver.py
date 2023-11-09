@@ -6,4 +6,5 @@ def process_request(body):
 rabbit = Rabbit('localhost', 5672, 'guest', 'guest', '/', blocking=True)
 
 consumer = Consumer(rabbit, 'my_queue')
+print("consumer created!")
 consumer.consume_messages(process_request)
