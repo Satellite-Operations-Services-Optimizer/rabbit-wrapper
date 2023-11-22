@@ -22,7 +22,7 @@ class BasicMessagePublisher:
         self.channel.basic_publish(
             exchange=exchange_name,
             routing_key=routing_key,
-            body=json.dumps(body),
+            body=self.encode_message(body),
             properties=pika.BasicProperties(
                 delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
             ),

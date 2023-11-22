@@ -6,9 +6,9 @@ from ..basic.consumer import BasicMessageConsumer
 logger = logging.getLogger(__name__)
 
 class Consumer(BasicMessageConsumer):
-    def __init__(self, rabbit: Rabbit, queue_name: str):
+    def __init__(self, rabbit: Rabbit, queue: str):
         super().__init__(rabbit)
-        self.queue_name = str(queue_name)
+        self.queue_name = str(queue)
         self.rabbit.declare_queue(self.queue_name)
     
     def get_message(self, auto_ack: bool = False):
