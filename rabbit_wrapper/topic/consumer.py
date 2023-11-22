@@ -6,7 +6,8 @@ from ..basic.consumer import BasicMessageConsumer
 logger = logging.getLogger(__name__)
 
 class TopicConsumer(BasicMessageConsumer):
-    def __init__(self, rabbit: Rabbit, topic_selector: str, queue: Optional[str], exchange: Optional[str]):
+    topics: set[str]
+    def __init__(self, rabbit: Rabbit, topic_selector: str, queue: Optional[str], exchange: Optional[str], exclusive:bool=False):
         super().__init__(rabbit)
         self.binding_key = str(topic_selector)
         if queue is not None:
@@ -22,10 +23,29 @@ class TopicConsumer(BasicMessageConsumer):
             self.exchange_name = 'default_topic_exchange'
 
         self.rabbit.declare_exchange(exchange_name=self.exchange_name, exchange_type='topic')
-        self.rabbit.bind_queue(
+    
+    def bind(self, topic: str|list[str]):
+        if type(topic)!=list:
+            topics = [topic]
+        else:
+            topics = topic
+        
+        for topic in topics:
+            if topic in self.topics: continue
+            self.topics.add(topic)
+            self.rabbit.bind_queue(
+                exchange_name=self.exchange_name,
+                queue_name=self.queue_name,
+                routing_key=topic
+            )
+        return self
+
+    def unbind(self, topic: str):
+        self.topics.remove(topic)
+        self.rabbit.unbind_queue(
             exchange_name=self.exchange_name,
             queue_name=self.queue_name,
-            routing_key=self.binding_key
+            routing_key=topic
         )
     
     def get_message(self, auto_ack: bool = False):
