@@ -1,15 +1,19 @@
 import logging
-from typing import Callable, Any
+from typing import Callable, Any, Optional
 from ..rabbit import Rabbit
 from ..basic.consumer import BasicMessageConsumer
 
 logger = logging.getLogger(__name__)
 
 class Consumer(BasicMessageConsumer):
-    def __init__(self, rabbit: Rabbit, queue: str):
+    def __init__(self, rabbit: Rabbit, queue: Optional[str]):
         super().__init__(rabbit)
-        self.queue_name = str(queue)
-        self.rabbit.declare_queue(self.queue_name)
+        if queue is not None:
+            self.queue_name = str(queue)
+            self.rabbit.declare_queue(self.queue_name)
+        else:
+            result = self.rabbit.declare_queue('') # create new queue
+            self.queue_name = result.method.queue
     
     def get_message(self, auto_ack: bool = False):
         (_, _, body) = super().get_message(self.queue_name, auto_ack)

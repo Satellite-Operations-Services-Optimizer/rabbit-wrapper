@@ -7,7 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 class Connection:
-    connection = None
+    connection: pika.BaseConnection
     def __init__(self, user: str, password: str, host: str, port: int, vhost='/', protocol="amqp"):
         credentials = pika.PlainCredentials(str(user), str(password))
         self.parameters = pika.ConnectionParameters(
@@ -52,7 +52,7 @@ class Connection:
         self.connection.close()
 
     @abstractmethod
-    def _create_pika_connection(self):
+    def _create_pika_connection(self) -> pika.BaseConnection:
         raise NotImplementedError()
 
 

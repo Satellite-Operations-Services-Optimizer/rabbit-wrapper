@@ -16,7 +16,7 @@ class Rabbit:
     ):
         self.check_connection()
         logger.debug(f"Trying to declare queue({queue_name})...")
-        self.channel.queue_declare(
+        return self.channel.queue_declare(
             queue=queue_name,
             exclusive=exclusive,
             durable=True
