@@ -10,6 +10,9 @@ class Rabbit:
             self.connection = SelectConnection(user, password, host, port, vhost)
         self.connection.connect()
         self.channel = self.connection.channel
+    
+    def as_uri(self):
+        return self.connection.as_uri()
 
     def declare_queue(
         self, queue_name, exclusive: bool = False

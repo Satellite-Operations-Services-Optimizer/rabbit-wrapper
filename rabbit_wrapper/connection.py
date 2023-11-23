@@ -24,6 +24,9 @@ class Connection:
             ssl_context.set_ciphers("ECDHE+AESGCM:!ECDSA")
             self.parameters.ssl_options = pika.SSLOptions(context=ssl_context)
     
+    def as_uri(self):
+        return f"{self.protocol}://{self.user}:{self.password}@{self.host}:{self.port}/{self.vhost}"
+    
     def check_connection(self):
         if not self.connection or self.connection.is_closed:
             return self.connect()
@@ -34,6 +37,7 @@ class Connection:
         while True:
             try:
                 self.connection = self._create_pika_connection()
+                self.connection.conn
                 self.channel = self.connection.channel()
                 if self.connection.is_open:
                     break
