@@ -1,6 +1,6 @@
 [project]
 name = "rabbit_wrapper"
-version = "0.1"
+version = "0.2"
 dependencies = [
     "pika",
     "msgpack",
