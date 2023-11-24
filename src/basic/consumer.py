@@ -1,5 +1,6 @@
 import logging
 import json
+import msgpack
 from ..rabbit import Rabbit
 
 logger = logging.getLogger(__name__)
@@ -23,7 +24,7 @@ class BasicMessageConsumer:
             return None
 
     def consume_messages(self, queue, callback):
-        self.rabbit.check_connection()
+        self.rabbit.ensure_connected()
         self.channel_tag = self.channel.basic_consume(
             queue=queue, on_message_callback=callback, auto_ack=True
         )
@@ -40,7 +41,7 @@ class BasicMessageConsumer:
 
     def decode_message(self, body):
         if type(body) is bytes:
-            rabbit_message = json.loads(body.decode())
-            return rabbit_message
+            message = json.loads(msgpack.unpackb(body))
+            return message["body"] # encoder wraps message in json with key "body" (to prevent errors when decoding non-json messages)
         else:
             raise NotImplementedError

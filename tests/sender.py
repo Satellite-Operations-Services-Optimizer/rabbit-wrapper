@@ -1,7 +1,15 @@
-from rabbit_wrapper import Rabbit, Publisher
+from src import Rabbit, Publisher
 
 rabbit = Rabbit('localhost', 5672, 'guest', 'guest', '/', blocking=True)
-publisher = Publisher(rabbit, 'my_queue')
+foo_publisher = Publisher(rabbit, 'foo_queue')
+bar_publisher = Publisher(rabbit, 'bar_queue')
 
-message = {"message_details": "some message details"}
-publisher.publish_message(message)
+foo_message = {"message": "i am foo"}
+bar_message = {"message": "i am bar"}
+
+class Test:
+    def __init__(self, message):
+        self.message = message
+
+foo_publisher.publish_message("foo msg")
+bar_publisher.publish_message("bar msg")

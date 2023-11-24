@@ -1,7 +1,9 @@
 import pika
-import json
 import logging
 import msgpack
+from typing import Any
+from fastapi.encoders import jsonable_encoder
+import json
 from ..rabbit import Rabbit
 
 logger = logging.getLogger(__name__)
@@ -16,9 +18,9 @@ class BasicMessagePublisher:
         self,
         exchange_name: str,
         routing_key: str,
-        body: any,
+        body: Any,
     ):
-        self.rabbit.check_connection()
+        self.rabbit.ensure_connected()
         self.channel.basic_publish(
             exchange=exchange_name,
             routing_key=routing_key,
@@ -31,8 +33,9 @@ class BasicMessagePublisher:
             f"Sent message. Exchange: {exchange_name}, Routing Key: {routing_key}, Body: {body}"
         )
 
-    def encode_message(self, body: dict, encoding_type: str = "bytes"):
+    def encode_message(self, body: Any, encoding_type: str = "bytes"):
+        message = { "body": jsonable_encoder(body) } # ensures that body is JSON serializable
         if encoding_type == "bytes":
-            return msgpack.packb(body)
+            return msgpack.packb(json.dumps(message))
         else:
             raise NotImplementedError

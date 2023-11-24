@@ -3,7 +3,8 @@ name = "rabbit_wrapper"
 version = "0.1"
 dependencies = [
     "pika",
-    "msgpack"
+    "msgpack",
+    "fastapi"
 ]
 
 [build-system]
