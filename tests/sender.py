@@ -11,5 +11,5 @@ class Test:
     def __init__(self, message):
         self.message = message
 
-foo_publisher.publish_message("foo msg")
+foo_publisher.publish_message(Test("foo msg"))
 bar_publisher.publish_message("bar msg")
