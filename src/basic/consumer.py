@@ -30,6 +30,8 @@ class BasicMessageConsumer:
         )
         logger.debug(f" [*] Waiting for messages from queue {queue}. To exit press CTRL+C")
         self.channel.basic_qos(prefetch_count=1)
+    
+    def start_consuming(self):
         self.channel.start_consuming()
 
     def cancel_consumer(self):

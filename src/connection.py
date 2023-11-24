@@ -5,11 +5,13 @@ import time
 from abc import abstractmethod
 import logging
 from typing import Optional
-from pika.adapters.asyncio_connection
+from pika.adapters.asyncio_connection import AsyncioConnection
+from pika import SelectConnection
+from threading import Thread
 
 logger = logging.getLogger(__name__)
 class Connection:
-    connection: Optional[pika.BlockingConnection|pika.SelectConnection] = None
+    connection: Optional[pika.BlockingConnection|AsyncioConnection] = None
     channel: Optional[pika.channel.Channel] = None
     def __init__(self, user: str, password: str, host: str, port: int, vhost='/', protocol="amqp"):
         credentials = pika.PlainCredentials(str(user), str(password))
@@ -91,29 +93,42 @@ class SyncConnection(Connection):
 class AsyncConnection(Connection):
     def _start_connection(self):
         logger.debug("RabbitMQ attempting to open connection...")
-        self.connection = pika.SelectConnection(
+        self.connection = SelectConnection(
             self.parameters,
             on_open_callback=self._on_connection_open,
+            on_open_error_callback=self._on_connection_error,
             on_close_callback=lambda _: self.close(),
-            on_open_error_callback=self._on_connection_error
         )
-        self.connection.ioloop.start()
+        self._start_thread()
         # block until we are done trying to connect (until either we connected or there was an error)
         while self._is_connecting:
             pass
 
     def close(self):
+        self._consuming = False
+        if self.connection.is_closing or self.connection.is_closed:
+            logger.info('Connection is closing or already closed')
+        else:
+            logger.info('Closing connection')
+            self.connection.ioloop.stop()
+            self.connection.close()
+
         if self.channel is not None:
             self.channel.close()
         if self.connection is not None:
             self.connection.close()
-            self.connection.ioloop.start()
+            self._start_thread()
 
     def _on_connection_open(self, connection):
         logger.debug("RabbitMQ connection opened successfully.")
-        self._is_connecting = False
         self.connection = connection
         self.connection.channel(on_open_callback=self._on_channel_open)
     
     def _on_channel_open(self, channel):
         self.channel = channel
+        self._is_connecting = False # end of callback chain, we are done trying to connect
+    
+    io_thread: Optional[Thread] = None
+    def _start_thread(self):
+        self.io_thread = Thread(target=self.connection.ioloop.start)
+        self.io_thread.start()
