@@ -1,4 +1,4 @@
-from src import Rabbit, Publisher
+from rabbit_wrapper import Rabbit, Publisher
 
 rabbit = Rabbit('localhost', 5672, 'guest', 'guest', '/', blocking=True)
 foo_publisher = Publisher(rabbit, 'foo_queue')

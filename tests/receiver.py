@@ -1,4 +1,4 @@
-from src import Rabbit, Consumer
+from rabbit_wrapper import Rabbit, Consumer
 
 def process_request(body):
     print(f'Processed message: {body}')
