@@ -1,5 +1,5 @@
 [project]
-name = "rabbit_wrapper"
+name = "rabbit-wrapper"
 version = "0.2"
 dependencies = [
     "pika",
