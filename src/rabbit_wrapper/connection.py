@@ -14,12 +14,12 @@ class Connection:
     connection: Optional[pika.BlockingConnection|AsyncioConnection] = None
     channel: Optional[pika.channel.Channel] = None
     def __init__(self, user: str, password: str, host: str, port: int, vhost='/', protocol="amqp"):
-        credentials = pika.PlainCredentials(str(user), str(password))
+        self.credentials = pika.PlainCredentials(str(user), str(password))
         self.parameters = pika.ConnectionParameters(
             host=str(host),
             port=int(port),
             virtual_host=str(vhost),
-            credentials=credentials,
+            credentials=self.credentials,
             heartbeat=36000,
             connection_attempts=5
         )
