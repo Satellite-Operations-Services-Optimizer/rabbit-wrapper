@@ -31,7 +31,7 @@ class Connection:
             self.parameters.ssl_options = pika.SSLOptions(context=ssl_context)
     
     def as_uri(self):
-        return f"{self.protocol}://{self.user}:{self.password}@{self.host}:{self.port}/{self.vhost}"
+        return f"{self.protocol}://{self.credentials.user}:{self.credentials.password}@{self.parameters.host}:{self.parameters.port}/{self.parameters.virtual_host}"
     
     def is_connected(self):
         return self.connection is not None and self.connection.is_open
