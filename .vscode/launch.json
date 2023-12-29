@@ -17,6 +17,20 @@
             "request": "launch",
             "module": "tests.sender",
             "justMyCode": true
+        },
+        {
+            "name": "RabbitWrapper: test topic_receiver",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.topic_receiver",
+            "justMyCode": true
+        },
+        {
+            "name": "RabbitWrapper: test topic_sender",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.topic_sender",
+            "justMyCode": true
         }
     ]
 }

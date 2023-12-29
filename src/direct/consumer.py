@@ -20,9 +20,9 @@ class Consumer(BasicMessageConsumer):
         body = self.decode_message(body)
         return body
     
-    def consume_messages(self, callback: Callable[[Any], Any]):
+    def register_callback(self, callback: Callable[[Any], Any]):
         logged_callback = self._logged_message_callback(callback)
-        super().consume_messages(self.queue_name, logged_callback)
+        super().register_callback(self.queue_name, logged_callback)
     
     def _logged_message_callback(self, callback: Callable[[Any], Any]):
         def callback_wrapper(channel, method, properties, body):

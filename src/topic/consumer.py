@@ -6,23 +6,22 @@ from ..basic.consumer import BasicMessageConsumer
 logger = logging.getLogger(__name__)
 
 class TopicConsumer(BasicMessageConsumer):
-    topics: set[str]
-    def __init__(self, rabbit: Rabbit, topic_selector: str, queue: Optional[str], exchange: Optional[str], exclusive:bool=False):
+    topics: set[str] = set()
+    def __init__(self, rabbit: Rabbit, topic_selector: Optional[str], queue: str = "", exchange: str = 'default_topic_exchange', exclusive:bool=False):
         super().__init__(rabbit)
-        self.binding_key = str(topic_selector)
-        if queue is not None:
+
+        if queue=="":
+            result = self.rabbit.declare_queue('', exclusive=True) # delete queue when consumer disconnects (we won't be able to get the auto-generated name of the queue anyways, so might as well delete it)
+            self.queue_name = result.method.queue
+        else:
             self.queue_name = str(queue)
             self.rabbit.declare_queue(self.queue_name)
-        else:
-            result = self.rabbit.declare_queue('') # create new queue
-            self.queue_name = result.method.queue
 
-        if exchange is not None:
-            self.exchange_name = str(exchange)
-        else:
-            self.exchange_name = 'default_topic_exchange'
-
+        self.exchange_name = str(exchange)
         self.rabbit.declare_exchange(exchange_name=self.exchange_name, exchange_type='topic')
+
+        if topic_selector is not None:
+            self.bind(str(topic_selector))
     
     def bind(self, topic: str|list[str]):
         if type(topic)!=list:
@@ -53,9 +52,9 @@ class TopicConsumer(BasicMessageConsumer):
         body = self.decode_message(body)
         return body
     
-    def consume_messages(self, callback: Callable[[Any], Any]):
+    def register_callback(self, callback: Callable[[Any], Any]):
         logged_callback = self._logged_message_callback(callback)
-        super().consume_messages(self.queue_name, logged_callback)
+        super().register_callback(self.queue_name, logged_callback)
     
     def _logged_message_callback(self, callback: Callable[[Any], Any]):
         def callback_wrapper(channel, method, properties, body):

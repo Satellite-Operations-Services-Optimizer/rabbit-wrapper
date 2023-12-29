@@ -11,6 +11,9 @@ class Rabbit:
         self.connection.connect()
         self.channel = self.connection.channel
     
+    def start_consuming(self):
+        self.channel.start_consuming()
+    
     def as_uri(self):
         return self.connection.as_uri()
 

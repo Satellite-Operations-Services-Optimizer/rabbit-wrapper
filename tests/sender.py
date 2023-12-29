@@ -1,4 +1,4 @@
-from rabbit_wrapper import Rabbit, Publisher
+from src import Rabbit, Publisher
 
 rabbit = Rabbit('localhost', 5672, 'guest', 'guest', '/', blocking=True)
 foo_publisher = Publisher(rabbit, 'foo_queue')
@@ -12,4 +12,4 @@ class Test:
         self.message = message
 
 foo_publisher.publish_message(Test("foo msg"))
-bar_publisher.publish_message("bar msg")
+bar_publisher.publish_message("bar mwjeiofwsg")

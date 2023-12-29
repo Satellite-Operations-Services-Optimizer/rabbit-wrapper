@@ -23,7 +23,7 @@ class BasicMessageConsumer:
             logger.debug("No message returned")
             return None
 
-    def consume_messages(self, queue, callback):
+    def register_callback(self, queue, callback):
         self.rabbit.ensure_connected()
         self.channel_tag = self.channel.basic_consume(
             queue=queue, on_message_callback=callback, auto_ack=True
@@ -31,10 +31,7 @@ class BasicMessageConsumer:
         logger.debug(f" [*] Waiting for messages from queue {queue}. To exit press CTRL+C")
         self.channel.basic_qos(prefetch_count=1)
     
-    def start_consuming(self):
-        self.channel.start_consuming()
-
-    def cancel_consumer(self):
+    def cancel_callbacks(self):
         if self.channel_tag is not None:
             self.channel.basic_cancel(self.channel_tag)
             self.channel_tag = None
