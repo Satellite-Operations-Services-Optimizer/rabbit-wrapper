@@ -1,16 +1,14 @@
 [project]
 name = "rabbit-wrapper"
-version = "0.3"
+version = "0.3.3"
 dependencies = [
     "pika",
     "msgpack",
     "fastapi"
 ]
 
-[tool.setuptools.packages.find]
-where = ["src"]
-exclude = ["tests"]
-namespaces = false
+[tool.setuptools.package-dir]
+"" = "src"
 
 [build-system]
 requires = ["setuptools", "setuptools-scm"]
