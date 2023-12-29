@@ -23,7 +23,8 @@ class Connection:
             heartbeat=36000,
             connection_attempts=5
         )
-        if protocol == "amqps":
+        self.protocol = protocol
+        if self.protocol == "amqps":
             # SSL Context for TLS configuration of Amazon MQ for RabbitMQ
             ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
             ssl_context.set_ciphers("ECDHE+AESGCM:!ECDSA")
