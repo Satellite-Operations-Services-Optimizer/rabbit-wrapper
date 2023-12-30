@@ -13,15 +13,14 @@ class BasicMessageConsumer:
 
     def get_message(self, queue_name: str, auto_ack: bool = False):
         logger.debug(f"Getting message from queue {queue_name}")
-        method_frame, header_frame, body = self.channel.basic_get(
+        result = self.channel.basic_get(
             queue=queue_name, auto_ack=auto_ack
         )
-        if method_frame:
-            logger.debug(f"{method_frame}, {header_frame}, {body}")
-            return method_frame, header_frame, body
+        if result[0] is not None:
+            logger.debug(f"received message: {result}")
         else:
             logger.debug("No message returned")
-            return None
+        return result
 
     def register_callback(self, queue, callback):
         self.rabbit.ensure_connected()
