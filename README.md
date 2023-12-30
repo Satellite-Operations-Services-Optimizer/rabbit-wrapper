@@ -45,7 +45,7 @@ message = consumer.get_message()
 ## Publishing messages
 ```python
 # specify the topic you want to publish the messages to
-publisher = Publisher(rabbit, 'order.image.created')
+publisher = TopicPublisher(rabbit, 'order.image.created')
 
 message = {"image_id": 1, "resolution": "high}
 publisher.publish_message(message)
