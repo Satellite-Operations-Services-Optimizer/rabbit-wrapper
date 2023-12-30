@@ -49,7 +49,9 @@ class TopicConsumer(BasicMessageConsumer):
     
     def get_message(self, auto_ack: bool = False):
         (_, _, body) = super().get_message(self.queue_name, auto_ack)
-        return self.decode_message(body)
+        if body is not None:
+            body = self.decode_message(body)
+        return body
     
     def register_callback(self, callback: Callable[[Any], Any]):
         logged_callback = self._logged_message_callback(callback)
