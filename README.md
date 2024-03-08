@@ -60,6 +60,7 @@ consumer = TopicConsumer(rabbit)
 
 # bind it to the topics you want the consumer to listen to. You can pass a topic, or a list of topics, that you want this consumer to listen to
 consumer.bind("order.*.created")
+consumer.bind("some.other.topic")
 
 def process_request(body):
     print(f'Processed message: {body}')
