@@ -8,6 +8,8 @@ from rabbit_wrapper import Rabbit, Publisher, Consumer, TopicPublisher, TopicCon
 rabbit = Rabbit('localhost', 5672, 'guest', 'guest', '/', blocking=True)
 ```
 
+NOTE: Non-blocking connections are not supported currently. Time permitting, support for this will be implemented
+
 # Direct Messaging
 ## Publishing messages
 ```python
