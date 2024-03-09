@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 class TopicConsumer(BasicMessageConsumer):
     topics: set[str] = set()
-    def __init__(self, rabbit: Rabbit, topic_selector: Optional[str], queue: str = "", exchange: str = 'default_topic_exchange', exclusive:bool=False):
+    def __init__(self, rabbit: Rabbit, topic_selector: Optional[str] = None, queue: str = "", exchange: str = 'default_topic_exchange', exclusive:bool=False):
         super().__init__(rabbit)
 
         if queue=="":
